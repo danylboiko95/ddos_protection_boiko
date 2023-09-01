@@ -28,7 +28,6 @@ case "$1" in
         ;;
     -i)
         docker run --name attacker_container sflow/hping3:latest --rand-source -R '127.0.0.1' -p "8080"
-        docker run --name attacker_container sflow/hping3:latest --rand-source -1 --flood 127.0.0.1 -p "$3"
         exit 1
         ;;
     *)

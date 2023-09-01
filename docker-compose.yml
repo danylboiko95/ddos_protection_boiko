@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  nginx:
+    image: ubuntu/nginx:latest
+    volumes:
+      - ./nginx/error.log:/usr/local/nginx/logs/error.log
+      - ./defender/config/nginx.conf:/etc/nginx/nginx.conf:ro
+
+        # - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      my_network:
+        ipv4_address: 172.20.0.2 # Set the desired IP address
+    ports:
+      - "127.0.0.1:8080:80"
+
+  node-app:
+    image: node:16
+    container_name: node-app
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    networks:
+      my_network:
+        ipv4_address: 172.20.0.3 # Set the desired IP address
+    ports:
+      - "6000:3000"
+    command: node index.js
+    environment:
+      NODE_ENV: production
+
+networks:
+  my_network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16 # Define the subnet for your network
